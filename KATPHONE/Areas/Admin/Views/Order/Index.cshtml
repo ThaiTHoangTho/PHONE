@@ -1,0 +1,155 @@
+﻿@model PagedList.IPagedList<KATPHONE.Models.HOADON>
+@using PagedList.Mvc;
+@using PagedList;
+@{
+    ViewBag.Title = "Danh sách đơn hàng";
+}
+
+@section naviheader{
+    <!-- Left navbar links -->
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+            <a href="/admin" class="nav-link">Trang Chủ</a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+            <a href="/admin/hoadon" class="nav-link">Danh sách đơn hàng</a>
+        </li>
+    </ul>
+
+}
+
+
+<!-- Main content -->
+<section class="content">
+
+    <!-- Default box -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Danh sách đơn đặt hàng</h3>
+        </div>
+        <div class="card-body">
+            <table class="table table-hover text-center">
+                <thead>
+                    <tr>
+                        <th>Mã đơn hàng</th>
+                        <th>Tên khách hàng</th>
+                        <th>Điện thoại</th>
+                        @*  <th>Trạng thái</th>*@
+                        <th>Số tiền</th>
+                        <th>Ngày lập hóa đơn</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        var db = new KATPHONE.Models.DIENTHOAIDBCONTEXT();
+                        var listhd = (from hd in db.HOADONs
+                                      join kh in db.KHACHHANGs
+                                      on hd.MAKH equals kh.MAKH
+                                      join ct in db.CTHDs
+                                      on hd.MAHD equals ct.MAHD
+                                      select new
+                                      {
+                                          kh.TENKH,
+                                          kh.SDT,
+                                          ct.TONGTIEN,
+                                          hd.NGAYLAP,
+                                          hd.MAHD
+                                      }).Distinct().ToList();
+                    }
+                    @foreach (var iteam in listhd)
+                    {
+                        if (Model != null && Model.Any())
+                        {
+                            <tr>
+                                <td>@iteam.MAHD</td>
+                                <td>@iteam.TENKH</td>
+                                <td>@iteam.SDT</td>
+                                @*<td>@(item.TypePayment==1?"Thanh toán khi nhận hàng":"Đã thanh toán")</td>*@
+                                <td>@KATPHONE.Common.Common.FormatNumber(iteam.TONGTIEN, 0)</td>
+                                <td>@iteam.NGAYLAP.ToString("dd/MM/yyyy")</td>
+                                <td>
+                                    <a href="/admin/order/detail/@iteam.MAHD" class="btn btn-sm btn-outline-info">Xem chi tiết</a>
+                                    <a href="#" class="btn btn-sm btn-outline-danger btnUpdate" data-id="@iteam.MAHD">Cập nhật</a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+            <div class="row">
+                <div class="col-6"></div>
+                <div class="col-6" style="text-align:right">
+                    @Html.PagedListPager(Model, page => Url.Action("Index", new { page, @class = "" }))
+                </div>
+            </div>
+        </div>
+        <!-- /.card-body -->
+        <div class="card-footer">
+          
+        </div>
+        <!-- /.card-footer-->
+    </div>
+    <!-- /.card -->
+
+</section>
+<!-- /.content -->
+
+<div class="modal fade" id="modal-default">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Cập nhật trạng thái</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="txtOrderId" value="0" />
+                <div class="form-group">
+                    <label>Trạng thái đơn hàng</label>
+                    <select class="form-control" id="ddTrangThai">
+                        <option value="2">
+                            Đã thanh toán
+                        </option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-outline-primary" id="btnLuu">Lưu</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+@section scripts{
+    <script>
+            $(document).ready(function () {
+                $('body').on('click', '.btnUpdate', function () {
+                    var id = $(this).data("id");
+                    $('#txtOrderId').val(id);
+                    $('#modal-default').modal('show');
+                });
+
+                $('body').on('click', '#btnLuu', function () {
+                    var id = $('#txtOrderId').val();
+                    var tt = $('#ddTrangThai').val();
+                    $.ajax({
+                        url: '/admin/order/UpdateStatus',
+                        type: 'POST',
+                        data: { id: id, status: tt },
+                        success: function (res) {
+                            if (res.Success) {
+                                location.reload();
+                            }
+                        }
+                    });
+                });
+            });
+    </script>
+}

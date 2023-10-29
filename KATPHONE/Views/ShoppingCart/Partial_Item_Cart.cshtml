@@ -1,0 +1,57 @@
+﻿
+@model IEnumerable<KATPHONE.Models.CTGH>
+@using KATPHONE.Common
+<table class="table">
+    <tr class="text-center">
+        <th>STT</th>
+        <th>Điện thoại</th>
+        <th>Ảnh</th>
+        <th>Giá</th>
+        <th style="width:100px;">Số lượng</th>
+        <th>Thành tiền</th>
+        <th style="width:200px;">
+
+        </th>
+    </tr>
+    @if (Model != null && Model.Any())
+    {
+        var i = 0;
+        var sum = decimal.Zero;
+        foreach (var item in Model)
+        {
+            sum += (decimal)item.TONGTIEN;
+            <tr class="text-center" id="trow_@item.MASP">
+                <td>@(i + 1)</td>
+                <td>
+                    <a href="/product/detail/@(item.MASP)">@item.TENSP</a>
+                </td>
+                <td><img src="@item.ANH" width="100" /></td>
+                <td>@Common.FormatNumber(item.GIABAN, 0)</td>
+                <td><input type="number" class="form-control" id="Quantity_@item.MASP" value="@item.SOLUONG" /></td>
+                <th>@Common.FormatNumber(item.TONGTIEN, 2)</th>
+                <td>
+                    <a href="#" data-id="@item.MASP" class="btn btn-sm btn-outline-danger btnDelete">Xóa</a>
+                    <a href="#" data-id="@item.MASP" class="btn btn-sm btn-outline-success btnUpdate">Cập nhật</a>
+                </td>
+            </tr>
+            i++;
+        }
+        <tr>
+            <th colspan="6" class="text-right">Tổng tiền: </th>
+            <th class="text-center">@Common.FormatNumber(sum, 0)</th>
+            <th></th>
+
+        </tr>
+
+
+    }
+    else
+    {
+        <tr>
+            <th colspan="7">Giỏ hàng hiện đang trống!!</th>
+        </tr>
+    }
+</table>
+
+
+

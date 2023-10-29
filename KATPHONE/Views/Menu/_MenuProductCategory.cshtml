@@ -1,0 +1,24 @@
+﻿@model IEnumerable<KATPHONE.Models.NHASANXUAT>
+
+@if (Model != null && Model.Any())
+{
+    <!-- Banner -->
+    <div class="banner">
+        <div class="container">
+            <div class="row">
+                @foreach (var items in Model)
+                {
+                    <div class="col-md-4">
+                        <div class="banner_item align-items-center">
+                            <div class="banner_category">
+                                <a href="@items.MANSX">@items.TENNSX</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+}
+
+

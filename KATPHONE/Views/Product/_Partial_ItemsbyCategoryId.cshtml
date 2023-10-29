@@ -1,0 +1,24 @@
+﻿@model IEnumerable<KATPHONE.Models.DIENTHOAI>
+
+@if (Model != null && Model.Any())
+{
+    foreach (var item in Model)
+    {
+        <div class="product-item @item.NHASANXUAT.MANSX">
+            <div class="product discount product_filter">
+                <div class="product_image">
+                    <img src="@item.ANH" alt="@item.TENSP">
+                </div>
+                <div class="favorite favorite_left"></div>
+                <div class="product_info">
+                    <h6 class="product_name"><a href="/product/detail/@(item.MASP)">@item.TENSP</a></h6>
+                    <div class="product_price">@KATPHONE.Common.Common.FormatNumber(item.GIABAN, 0)</div>
+
+                </div>
+            </div>
+            <div class="red_button add_to_cart_button"><a href="#" class="btnAddtocart" data-id="@item.MASP">add to cart</a></div>
+        </div>
+
+    }
+}
+

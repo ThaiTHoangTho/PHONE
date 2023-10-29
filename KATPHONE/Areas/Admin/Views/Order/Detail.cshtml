@@ -1,0 +1,129 @@
+﻿@model KATPHONE.Models.HOADON
+
+@{
+    ViewBag.Title = "Chi tiết đơn hàng";
+}
+
+@section naviheader{
+    <!-- Left navbar links -->
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+            <a href="/admin" class="nav-link">Trang Chủ</a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+            <a href="#" class="nav-link">Chi tiết đơn hàng</a>
+        </li>
+    </ul>
+
+}
+
+
+<!-- Main content -->
+<section class="content">
+
+    <!-- Default box -->
+    <div class="card card-success">
+        <div class="card-header">
+            <h3 class="card-title">Chi tiết đơn hàng</h3>
+        </div>
+        @{  var db = new KATPHONE.Models.DIENTHOAIDBCONTEXT();
+            var listhd = (from hd in db.HOADONs
+                          join kh in db.KHACHHANGs
+                          on hd.MAKH equals kh.MAKH
+                          join ct in db.CTHDs
+                          on hd.MAHD equals ct.MAHD
+                          select new
+                          {
+                              kh.TENKH,
+                              kh.SDT,
+                              kh.EMAIL,
+                              ct.TONGTIEN,
+                              hd.NGAYLAP,
+                              hd.MAHD
+                          }).Distinct().ToList();
+        }
+        @foreach (var iteam in listhd)
+        {
+
+            if (Model.MAHD == iteam.MAHD)
+            {
+
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Mã đơn hàng</label>
+                                <p class="form-control">@iteam.MAHD</p>
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Tên khách hàng</label>
+                                <p class="form-control">@iteam.TENKH</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Tổng hóa đơn</label>
+                                <p class="form-control">@KATPHONE.Common.Common.FormatNumber(iteam.TONGTIEN, 0)</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Điện thoại</label>
+                                <p class="form-control">@iteam.SDT</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Ngày đặt hàng</label>
+                                <p class="form-control">@Model.NGAYLAP.ToString("dd/MM/yyyy")</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Email</label>
+                                <p class="form-control">@iteam.EMAIL</p>
+                            </div>
+                        </div>
+                       @* <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Trạng thái đơn hàng</label>
+                                <p class="form-control">@(Model.thanhtoan==1?"Thanh toán khi nhận hàng":"Đã thanh toán")</p>
+                            </div>
+                        </div>*@
+
+                        <div class="col-md-6">
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <h2> Danh sách sản phẩm</h2>
+                        </div>
+                        <div class="col-12">
+                            @Html.Action("Partial_ProductDetail", "Order", new { id = Model.MAHD })
+                        </div>
+                    </div>
+
+                </div>
+
+            }
+        }
+        <!-- /.card-body -->
+        <div class="card-footer">
+            <a href="/admin/order" class="btn btn-outline-danger">Quay lại</a>
+            <button type="submit" class="btn btn-outline-success">Submit</button>
+
+        </div>
+        <!-- /.card-footer-->
+    </div>
+    <!-- /.card -->
+
+</section>
+<!-- /.content -->

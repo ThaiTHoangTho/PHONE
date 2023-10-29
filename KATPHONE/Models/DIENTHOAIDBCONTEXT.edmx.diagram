@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="a1ccc7b2b8674a559dbf8192bf5880b2" Name="Diagram1">
+        <EntityTypeShape EntityType="QUANLYDTDBCONTEXT.CTHD" Width="1.5" PointX="5.25" PointY="0.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="QUANLYDTDBCONTEXT.DIENTHOAI" Width="1.5" PointX="3" PointY="6.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="QUANLYDTDBCONTEXT.HOADON" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="QUANLYDTDBCONTEXT.KHACHHANG" Width="1.5" PointX="0.75" PointY="0.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="QUANLYDTDBCONTEXT.NHASANXUAT" Width="1.5" PointX="0.75" PointY="7.875" IsExpanded="true" />
+        <AssociationConnector Association="QUANLYDTDBCONTEXT.FK__CTHD__MAHD__3C69FB99" ManuallyRouted="false" />
+        <AssociationConnector Association="QUANLYDTDBCONTEXT.FK__CTHD__MASP__3D5E1FD2" ManuallyRouted="false" />
+        <AssociationConnector Association="QUANLYDTDBCONTEXT.FK_DIENTHOAI_NHASANXUAT" ManuallyRouted="false" />
+        <AssociationConnector Association="QUANLYDTDBCONTEXT.FK__HOADON__MAKH__398D8EEE" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

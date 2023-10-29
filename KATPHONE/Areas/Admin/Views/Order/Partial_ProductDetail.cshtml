@@ -1,0 +1,55 @@
+﻿@model IEnumerable<KATPHONE.Models.CTHD>
+@using KATPHONE.Common
+@if (Model != null && Model.Any())
+{
+    int i = 1;
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Tên sản phẩm</th>
+                <th>Giá</th>
+                <th>Số lượng</th>
+                <th>Thành tiền</th>
+            </tr>
+
+        </thead>
+        <tbody>
+            @{
+                var db = new KATPHONE.Models.DIENTHOAIDBCONTEXT();
+                var listhd = (from hd in db.HOADONs
+                              join ct in db.CTHDs
+                              on hd.MAHD equals ct.MAHD
+                              join h in db.DIENTHOAIs
+                              on ct.MASP equals h.MASP
+                              select new
+                              {
+                                  h.TENSP,
+                                  h.GIABAN,
+                                  ct.SOLUONG,
+                                  ct.TONGTIEN,
+                                  hd.MAHD
+                              }).Distinct().ToList();
+            }
+            @foreach (var item in listhd)
+            {
+                foreach (var m in Model)
+                {
+                    if (m.MAHD == item.MAHD)
+                    {
+                        <tr>
+                            <td>@i</td>
+                            <td>@item.TENSP</td>
+                            <td>@item.GIABAN</td>
+                            <td>@item.SOLUONG</td>
+                            <td>@Common.FormatNumber(item.TONGTIEN, 0)</td>
+                        </tr>
+                        i++;
+                    }
+                }
+            }
+        </tbody>
+    </table>
+}
+
+

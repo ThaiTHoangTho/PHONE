@@ -1,0 +1,35 @@
+﻿@model IEnumerable<KATPHONE.Models.CTGH>
+@using KATPHONE.Common
+
+@if (Model != null && Model.Any())
+{
+    <h3>GIỎ HÀNG <span style="float:right;position:relative"><small>@Model.Count()</small></span></h3>
+    /* var i = 0;*/
+    var sum = decimal.Zero;
+    <div style="border:1px solid #808080;">
+        <table class="table">
+            @foreach (var item in Model)
+            {
+                sum += (decimal)item.TONGTIEN;
+                <tr>
+                    <td>@item.TENSP</td>
+                    <td>@item.SOLUONG</td>
+                    <td>@Common.FormatNumber(item.GIABAN, 0)</td>
+                </tr>
+            }
+            <tr>
+                <td></td>
+                <td>Tổng tiền</td>
+                <td>@Common.FormatNumber(sum, 0)</td>
+            </tr>
+        </table>
+    </div>
+
+}
+else
+{
+
+}
+
+
+
